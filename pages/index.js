@@ -30,38 +30,135 @@ export default function Home() {
   }
 
   return (
-    <div style={{ maxWidth: '600px', margin: '0 auto', padding: '20px' }}>
-      <h1>AI Chat</h1>
+    <>
+      <style jsx>{`
+        .container {
+          min-height: 100vh;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .chat-box {
+          width: 100%;
+          max-width: 500px;
+          background: white;
+          border-radius: 20px;
+          box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+          overflow: hidden;
+        }
+        .header {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          padding: 20px;
+          text-align: center;
+          font-size: 24px;
+          font-weight: 600;
+        }
+        .messages {
+          height: 400px;
+          overflow-y: auto;
+          padding: 20px;
+          background: #f8f9fa;
+        }
+        .message {
+          margin-bottom: 15px;
+          display: flex;
+        }
+        .message.user {
+          justify-content: flex-end;
+        }
+        .message-bubble {
+          max-width: 80%;
+          padding: 12px 16px;
+          border-radius: 18px;
+          font-size: 14px;
+          line-height: 1.4;
+        }
+        .message.user .message-bubble {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+        }
+        .message.ai .message-bubble {
+          background: white;
+          color: #333;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .typing {
+          color: #666;
+          font-style: italic;
+          padding: 10px 20px;
+        }
+        .input-area {
+          padding: 20px;
+          background: white;
+          display: flex;
+          gap: 10px;
+        }
+        .input {
+          flex: 1;
+          padding: 12px 16px;
+          border: 2px solid #e9ecef;
+          border-radius: 25px;
+          outline: none;
+          font-size: 14px;
+          transition: border-color 0.3s;
+        }
+        .input:focus {
+          border-color: #667eea;
+        }
+        .send-btn {
+          padding: 12px 20px;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          border: none;
+          border-radius: 25px;
+          cursor: pointer;
+          font-weight: 600;
+          transition: transform 0.2s;
+        }
+        .send-btn:hover:not(:disabled) {
+          transform: translateY(-2px);
+        }
+        .send-btn:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+      `}</style>
       
-      <div style={{ height: '400px', border: '1px solid #ccc', padding: '10px', overflowY: 'scroll', marginBottom: '10px' }}>
-        {messages.map((msg, i) => (
-          <div key={i} style={{ marginBottom: '10px', textAlign: msg.type === 'user' ? 'right' : 'left' }}>
-            <div style={{ 
-              display: 'inline-block', 
-              padding: '8px 12px', 
-              borderRadius: '8px',
-              backgroundColor: msg.type === 'user' ? '#007bff' : '#f1f1f1',
-              color: msg.type === 'user' ? 'white' : 'black'
-            }}>
-              {msg.content}
-            </div>
+      <div className="container">
+        <div className="chat-box">
+          <div className="header">
+            AI Chat Assistant
           </div>
-        ))}
-        {loading && <div>AI is typing...</div>}
-      </div>
+          
+          <div className="messages">
+            {messages.map((msg, i) => (
+              <div key={i} className={`message ${msg.type}`}>
+                <div className="message-bubble">
+                  {msg.content}
+                </div>
+              </div>
+            ))}
+            {loading && <div className="typing">AI is typing...</div>}
+          </div>
 
-      <div style={{ display: 'flex' }}>
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-          placeholder="Type your message..."
-          style={{ flex: 1, padding: '10px', marginRight: '10px' }}
-        />
-        <button onClick={sendMessage} disabled={loading} style={{ padding: '10px 20px' }}>
-          Send
-        </button>
+          <div className="input-area">
+            <input
+              className="input"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+              placeholder="Type your message..."
+            />
+            <button className="send-btn" onClick={sendMessage} disabled={loading}>
+              Send
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
